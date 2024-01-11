@@ -8,8 +8,6 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-
-
 class DQN(nn.Module):
 
     def __init__(self, n_observations, n_actions):
@@ -26,6 +24,51 @@ class DQN(nn.Module):
         return self.layer3(x)
 
 
+# Motors:
+import RPi.GPIO as GPIO
+from time import sleep
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
+Motor1 = {'EN': 25, 'input1': 24, 'input2': 23}
+for x in Motor1:
+    GPIO.setup(Motor1[x], GPIO.OUT)
+
+EN1 = GPIO.PWM(Motor1['EN'], 100)
+EN1.start(0)
+
+# Functions for running sims
+
+def step(observation, thresh_x, thresh_rad):
+    terminated = bool(
+        observation[0] < -thresh_x
+        or observation[0] > thresh_x
+        or -thresh_rad-0.1 < observation[2] < -thresh_rad
+        or thresh_rad+0.1 >observation[2] > thresh_rad
+    )
+    if not terminated:
+        add = 1
+    else:
+        add = 0
+
+    return add, terminated
+
+def run_motor(action):
+    if action == 0:
+        print("Going left")
+        EN1.ChangeDutyCycle(100)
+        GPIO.output(Motor1['input1'], GPIO.HIGH)
+        GPIO.output(Motor1['input2'], GPIO.LOW)
+        sleep(0.02)
+    if action == 1:
+        print("going right")
+        EN1.ChangeDutyCycle(100)
+        GPIO.output(Motor1['input1'], GPIO.LOW)
+        GPIO.output(Motor1['input2'], GPIO.HIGH)
+        sleep(0.02)        
+
+# Variables
+
 n_actions = 2
 n_observations = 4
 filefolder = "/home/gracek1459/Documents/L46/L46_sim2Real/"
@@ -37,29 +80,8 @@ starting_time = time.time()
 count = 0
 check = False
 threshold_x = 0.3
-threshold_rad = 0.2
+threshold_rad = 0.25
 
-
-def step(observation, thresh_x, thresh_rad):
-    terminated = bool(
-        observation[0] < -thresh_x
-        or observation[0] > thresh_x
-        or observation[2] < -thresh_rad
-        or observation[2] > thresh_rad
-    )
-    if not terminated:
-        add = 1
-    else:
-        add = 0
-
-    return add, terminated
-
-def run_motor(action):
-    if action == 1:
-        print("Going left")
-    if action == 0:
-        print("going right")
-    # TODOO
 
 while True:
     if ser.in_waiting > 0:
@@ -87,13 +109,14 @@ while True:
             if check:
                 reward, terminated= step(observation,threshold_x,threshold_rad)
                 count = count + reward
+
+                print(observation)
                 if terminated:
                     print("PENDULUM DIED STOP SCRIPT")
                     break
 
             #elapsed_time = time.time()
             #print(elapsed_time - starting_time, values)
-            print(observation)
             state = torch.tensor(observation, dtype=torch.float32).unsqueeze(0)
             with torch.no_grad():
                 # t.max(1) will return the largest column value of each row.
@@ -102,6 +125,10 @@ while True:
                 action = model(state).max(1).indices.view(1, 1)
                 run_motor(action)
                 check = True
-
-        except ValueError or IndexError or UnicodeDecodeError:
+        except UnicodeDecodeError:
             print("")
+        except IndexError:
+            print("")
+        except ValueError:
+            print("")
+        
