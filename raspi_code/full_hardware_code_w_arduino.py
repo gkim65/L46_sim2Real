@@ -43,8 +43,8 @@ def step(observation, thresh_x, thresh_rad):
     terminated = bool(
         observation[0] < -thresh_x
         or observation[0] > thresh_x
-        or -thresh_rad-0.1 < observation[2] < -thresh_rad
-        or thresh_rad+0.1 >observation[2] > thresh_rad
+        # or -thresh_rad-0.1 < observation[2] < -thresh_rad
+        # or thresh_rad+0.1 >observation[2] > thresh_rad
     )
     if not terminated:
         add = 1
@@ -59,13 +59,13 @@ def run_motor(action):
         EN1.ChangeDutyCycle(100)
         GPIO.output(Motor1['input1'], GPIO.HIGH)
         GPIO.output(Motor1['input2'], GPIO.LOW)
-        sleep(0.02)
+        sleep(0.01)
     if action == 1:
         print("going right")
         EN1.ChangeDutyCycle(100)
         GPIO.output(Motor1['input1'], GPIO.LOW)
         GPIO.output(Motor1['input2'], GPIO.HIGH)
-        sleep(0.02)        
+        sleep(0.01)        
 
 # Variables
 
@@ -73,7 +73,7 @@ n_actions = 2
 n_observations = 4
 filefolder = "/home/gracek1459/Documents/L46/L46_sim2Real/"
 model = DQN(n_observations, n_actions)
-model.load_state_dict(torch.load(filefolder+"cart_pole_policy.pt", map_location='cpu'))
+model.load_state_dict(torch.load(filefolder+"cart_pole_policy_lighter.pt", map_location='cpu'))
 model.eval()
 
 starting_time = time.time()
@@ -105,7 +105,7 @@ while True:
             #observation = [values[2], values[3], values[8], values[9]]
             #observation = [values[6], values[7], values[8], values[9]]
             print(values)
-            observation = [(values[2]+values[6])/2, (values[3]+values[7])/2, values[8], values[9]]
+            observation = [(values[2]+values[6])/2, (values[3]+values[7])/2, values[8]*2, values[9]]
             if check:
                 reward, terminated= step(observation,threshold_x,threshold_rad)
                 count = count + reward
@@ -123,6 +123,11 @@ while True:
                 # second column on max result is index of where max element was
                 # found, so we pick action with the larger expected reward.
                 action = model(state).max(1).indices.view(1, 1)
+                # if count%2 == 1: # or observation[2] < 0:
+                #     action = 0
+                # elif count%2 == 0: # or observation[2] > 0:
+                #     action = 1
+                
                 run_motor(action)
                 check = True
         except UnicodeDecodeError:
