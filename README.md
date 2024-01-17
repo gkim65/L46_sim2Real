@@ -1,5 +1,9 @@
 # L46_sim2Real
 
+## Videos of Tests
+
+Videos are included in the folder Videos_Hardware, and can be watched by downloading the video (the Partway_success_180_steps.mp4 is the shortest one)
+
 
 ## Hardware Photos
 
