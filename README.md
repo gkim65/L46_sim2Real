@@ -2,25 +2,8 @@
 
 The Github repository is set up in the following way:
 
-├── Photos_Hardware  
-│   ├── *** Many photos here  
-│   ├── ...  
-├── Videos_Hardware  
-│   ├── *** 3 videos here  
-│   ├── ...  
-├── arduino_full_sensor_readings  
-│   ├── arduino_full_sensor_readings.ino     **Comment 1**  
-├── raspi_code  
-│   ├── full_hardware_code_w_arduino.py    **Comment 6**  
-│   ├── ...  
-├── saved_policies **Comment 2**  
-│   ├── ...  
-├── Plotting.ipynb       **Comment 4**  
-├── README.md  
-├── **cartpole_multipleSim.py**      **Comment 3**  
-└── cartpole_RL.ipynb  
-└── cartpole_simpler_RL.ipynb  
-└── requirements.txt       **Comment 5**  
+<img width="447" alt="Screenshot 2024-01-17 at 7 16 37 PM" src="https://github.com/gkim65/L46_sim2Real/assets/40607001/cd287332-464f-49ac-91e4-c8ff841bdd30">
+
 
 **Comment 1** - Arduino Code that runs forever reading sensor inputs and sending to the Raspberry Pi through Serial Connection  
 **Comment 2** - DQN RL policies trained from pytorch that were used to run on the raspberry pi  
