@@ -1,5 +1,7 @@
 # L46_sim2Real
 
+*The updated final report that includes an abstract is in now uploaded!*
+
 The Github repository is set up in the following way:
 
 <img width="447" alt="Screenshot 2024-01-17 at 7 16 37 PM" src="https://github.com/gkim65/L46_sim2Real/assets/40607001/cd287332-464f-49ac-91e4-c8ff841bdd30">
