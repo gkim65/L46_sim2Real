@@ -332,8 +332,8 @@ if __name__ == "__main__":
 
         name = "Test on - edge_limits"
         run = neptune.init_run(
-            project="ACS-MPhil/L46",
-            api_token="eyJhcGlfYWRkcmVzcyI6Imh0dHBzOi8vYXBwLm5lcHR1bmUuYWkiLCJhcGlfdXJsIjoiaHR0cHM6Ly9hcHAubmVwdHVuZS5haSIsImFwaV9rZXkiOiI0YzEzNjgwMi1kMWMzLTRhNGUtYTJkNy0wNWJmNjRhYWIzNWMifQ==",
+            project="",
+            api_token="",
         )  # your credentials
 
         run_model(run, num_ep_user, BATCH_SIZE, GAMMA, EPS_START, EPS_END, EPS_DECAY, TAU, LR, hardware_prob_response,name,edge_limit,random_gen)
