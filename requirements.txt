@@ -1,0 +1,6 @@
+neptune
+gymnasium
+matplotlib
+torch
+IPython
+pygame

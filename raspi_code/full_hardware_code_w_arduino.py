@@ -71,7 +71,7 @@ def run_motor(action):
 
 n_actions = 2
 n_observations = 4
-filefolder = "/home/gracek1459/Documents/L46/L46_sim2Real/"
+filefolder = "/home/gracek1459/Documents/L46/L46_sim2Real/saved_policies" #May need to change this location to run this script
 model = DQN(n_observations, n_actions)
 model.load_state_dict(torch.load(filefolder+"cart_pole_policy_lighter.pt", map_location='cpu'))
 model.eval()
